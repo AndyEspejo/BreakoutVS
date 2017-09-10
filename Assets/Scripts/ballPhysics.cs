@@ -25,7 +25,7 @@ public class ballPhysics : MonoBehaviour {
         if (ballDirection == Direction.left) {
             ballBody.AddForce(Vector3.left * initForce);
         } else if(ballDirection == Direction.right) {
-            ballBody.AddForce(Vector3.left * initForce);
+            ballBody.AddForce(Vector3.right * initForce);
         }
     }
 }
