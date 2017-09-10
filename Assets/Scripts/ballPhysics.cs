@@ -39,13 +39,14 @@ public class ballPhysics : MonoBehaviour {
             calculateBounce(collision.gameObject);
         }
 
+        //eventually changing 3 to its own, changing variable
         if (collision.gameObject.name == "topWall") {
-            ballBody.AddForce(Vector3.down * initForce * 2);
-            //need to fix to it does not stop going side ways
+            ballBody.velocity = new Vector2(ballBody.velocity.x, -3);
+            
         }
         if (collision.gameObject.name == "botWall") {
-            ballBody.AddForce(Vector3.up * initForce * 2);
-            //need to fix to it does not stop going side ways
+            ballBody.velocity = new Vector2(ballBody.velocity.x, 3);
+
         }
 
     }
