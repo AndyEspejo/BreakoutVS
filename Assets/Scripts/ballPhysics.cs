@@ -21,6 +21,7 @@ public class ballPhysics : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        initForce++;
     }
 
     void initMovement(Direction ballDirection) {
@@ -35,52 +36,71 @@ public class ballPhysics : MonoBehaviour {
     void OnCollisionEnter2D(Collision2D collision) {
         
         if(collision.gameObject.tag == "Paddles" ) {
-            print("collided");
             calculateBounce(collision.gameObject);
         }
 
         //eventually changing 3 to its own, changing variable
-        if (collision.gameObject.name == "topWall") {
-            ballBody.velocity = new Vector2(ballBody.velocity.x, -3);
-            
+        if (collision.gameObject.tag == "Wall") {
+            calculateBounce(collision.gameObject);     
         }
-        if (collision.gameObject.name == "botWall") {
-            ballBody.velocity = new Vector2(ballBody.velocity.x, 3);
 
-        }
 
     }
 
     void calculateBounce(GameObject paddle) {
-        paddleLogic.paddleDir hitPaddleDir = paddle.GetComponent<paddleLogic>().dir;
-        if (hitPaddleDir == paddleLogic.paddleDir.up) {
-            if (paddle.name == "paddle") {
-                ballBody.AddForce(Vector3.right * initForce);
-                ballBody.AddForce(Vector3.up * initForce);
+        if (paddle.tag == "Paddles") {
+            paddleLogic.paddleDir hitPaddleDir = paddle.GetComponent<paddleLogic>().dir;
+            if (hitPaddleDir == paddleLogic.paddleDir.up) {
+                if (paddle.name == "paddle") {
+                    ballBody.AddForce(Vector3.right * initForce);
+                    ballBody.AddForce(Vector3.up * initForce);
+                }
+                if (paddle.name == "paddle2") {
+                    ballBody.AddForce(Vector3.left * initForce);
+                    ballBody.AddForce(Vector3.up * initForce);
+                }
             }
-            if (paddle.name == "paddle2") {
-                ballBody.AddForce(Vector3.left * initForce);
-                ballBody.AddForce(Vector3.up * initForce);
+            else if (hitPaddleDir == paddleLogic.paddleDir.down) {
+                if (paddle.name == "paddle") {
+                    ballBody.AddForce(Vector3.right * initForce);
+                    ballBody.AddForce(Vector3.down * initForce);
+                }
+                if (paddle.name == "paddle2") {
+                    ballBody.AddForce(Vector3.left * initForce);
+                    ballBody.AddForce(Vector3.down * initForce);
+                }
+            }
+            else {
+                if (paddle.name == "paddle") {
+                    ballBody.AddForce(Vector3.right * initForce);
+                }
+                if (paddle.name == "paddle2") {
+                    ballBody.AddForce(Vector3.left * initForce);
+                }
             }
         }
-        else if (hitPaddleDir == paddleLogic.paddleDir.down) {
-            if (paddle.name == "paddle") {
+        
+        
+        //Hit a wall
+        if (paddle.name == "topWall") {
+            if(ballBody.velocity.x > 0) {
                 ballBody.AddForce(Vector3.right * initForce);
-                ballBody.AddForce(Vector3.down * initForce);
-            }
-            if (paddle.name == "paddle2") {
-                ballBody.AddForce(Vector3.left * initForce);
-                ballBody.AddForce(Vector3.down * initForce);
-            }
-        }else {
-            if (paddle.name == "paddle") {
-                ballBody.AddForce(Vector3.right * initForce);
-            }
-            if (paddle.name == "paddle2") {
+            } else {
                 ballBody.AddForce(Vector3.left * initForce);
             }
+            ballBody.AddForce(Vector3.down * initForce);
+
+        }
+        if (paddle.name == "botWall") {
+            if (ballBody.velocity.x > 0) {
+                ballBody.AddForce(Vector3.right * initForce);
+            }
+            else {
+                ballBody.AddForce(Vector3.left * initForce);
+            }
+            ballBody.AddForce(Vector3.up * initForce);
+
         }
 
-
-        }
+    }
 }
